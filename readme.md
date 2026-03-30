@@ -5,6 +5,9 @@ Sofia Zemmahi
 ## Project Description
 This project aims to analyze tremor signals using smartphone accelerometer data. The objective is to estimate tremor frequency and compare conditions (e.g., before vs after).
 
+## Scientific Question
+Does tremor frequency change between different conditions (e.g., before vs after intervention)?
+
 ## Workflow
 1. Data acquisition using smartphone (Phyphox)
 2. Signal preprocessing (Python)
