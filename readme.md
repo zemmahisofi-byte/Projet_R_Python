@@ -78,4 +78,10 @@ where:
 
 In addition, frequency-domain analysis was performed using Fast Fourier Transform (FFT), which allows identification of the dominant frequency component of the signal (Oppenheim & Schafer, 2010).
 
-The dominant tremor frequency corresponds to the frequency with the highest amplitude in the spectrum (Elble, 2003).
+The dominant tremor frequency corresponds to the frequency with the highest amplitude in the spectrum (Elble, 2003). 
+
+For each task segment, the dominant tremor frequency was computed from the accelerometer signal.
+Each task was repeated three times, and the dominant frequency was calculated for each repetition.
+This allowed assessment of:
+- differences in tremor frequency between conditions (rest vs drinking),
+- and reproducibility of the measurement across repetitions and across recording days.
