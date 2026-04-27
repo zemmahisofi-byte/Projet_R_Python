@@ -2,9 +2,6 @@
 ------------------------------------------------
 # Characterization of cerebellar tremor across standardized upper-limb tasks using smartphone accelerometry Phyhox 
 
-## Author
-Sofia Zemmahi
-
 ## 1. Scientific Context 
 
 ### 1.1. Background 
