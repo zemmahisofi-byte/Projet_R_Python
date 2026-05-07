@@ -1,13 +1,15 @@
 ---
 title: "Statistical analysis of cerebellar tremor frequency"
-author: "Sofia ZEMMAHI "
+author: 'Sofia ZEMMAHI '
 date: "`r format(Sys.time(), '%d %B, %Y, %H:%M')`"
 output:
   html_document:
     df_print: paged
     code_folding: hide
-    toc: true
-    number_sections: true
+    toc: yes
+    number_sections: yes
+  pdf_document:
+    toc: yes
 ---
 
 # Objective
@@ -18,7 +20,7 @@ The analysis is based on the dominant tremor frequency and RMS amplitude extract
 
 
 
-# 1. Import dataframe from the final data folder
+# Import dataframe from the final data folder
 
 ```{r}
 library(tidyverse)
@@ -26,4 +28,42 @@ all_results <- read.csv("final_data/all_results.csv")
 View(all_results)
 ```
 
+
+# Overview of the dataset
+
+The final dataframe contains the dominant tremor frequency and RMS amplitude extracted from each rest and grasping phase across the three experimental days.
+```{r}
+
+head(all_results)
+
+summary(all_results)
+
+str(all_results)
+
+```
+
+#  Descriptive statistics
+
+Descriptive statistics were computed to summarize dominant tremor frequency and RMS amplitude across days and repetitions.
+
+Mean values, standard deviations, medians, and ranges were calculated in order to obtain a first overview of tremor variability and measurement stability.
+
+```{r}
+library(tidyverse)
+
+descriptive_stats <- all_results %>%
+  group_by(Day, Condition) %>%
+  summarise(
+    mean_frequency = mean(Dominant_Frequency_Hz),
+    sd_frequency = sd(Dominant_Frequency_Hz),
+    median_frequency = median(Dominant_Frequency_Hz),
+    min_frequency = min(Dominant_Frequency_Hz),
+    max_frequency = max(Dominant_Frequency_Hz),
+    mean_rms = mean(RMS_Amplitude),
+    sd_rms = sd(RMS_Amplitude),
+    .groups = "drop"
+  )
+
+descriptive_stats
+```
 
