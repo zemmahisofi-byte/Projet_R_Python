@@ -14,44 +14,65 @@ output:
 
 # Objective
 
-The objective of this R analysis is to explore the reproducibility of smartphone-based accelerometry for quantifying cerebellar tremor frequency across repeated grasping tasks and across three consecutive days.
+To verify if a smartphone accelerometre *PhyPhox* can measure cerebellar tremor reproducibly.
 
-The analysis is based on the dominant tremor frequency and RMS amplitude extracted from Python using FFT.
+And More ore specifically:
+Are the obtained frequencies consistent:
 
+* between repetitions,
+* between days,
+* and between conditions?
+
+The main variable of this study is the dominant frequency because cerebellar tremor is defined by a low frequency (<5 Hz),
+and the use of FFT to extract that frequency.
+
+Here the main outcome is Dominant_Frequency_Hz.
+
+A secondary essential variable is RMS wich is the Root Mean square amplitude. 
+It measures the intensity of the tremor, not the frequent.
+It is used to: quantify the intensity, verify that the tremor increases during the action and strengthen clinical consistency.
+
+So the main question of this analysis is : 
+**Does the smartphone *PhyPhox* accelerometre measure a cohent frequency with cerebellar tremor?**
+
+We can answer this principal question in three under-parts : 
+1) Do the frequencies remain stable between repetitions? -> Intra day reproducibility.
+2) Do the frequencies remain consistent between days? -> Inter day reproducibility.
+3) Does tremor increase during action?
+
+
+# Part 1 : Dominant Frequency 
+
+1. Descriptive Statistics
+
+Objective: To describe the obtained frequencies.
+
+We calculate : 
+* mean frequency
+* SD
+* min/max
+* median
+
+Why ? 
+To verify if frequencies are in cerebellar area ans and if they are close between repetitions.
 
 
 # Import dataframe from the final data folder
 
 ```{r}
+
+# Import dataframe from the final data folder
 library(tidyverse)
+
 all_results <- read.csv("final_data/all_results.csv")
+
 View(all_results)
-```
-
-
-# Overview of the dataset
-
-The final dataframe contains the dominant tremor frequency and RMS amplitude extracted from each rest and grasping phase across the three experimental days.
-```{r}
-
-head(all_results)
-
-summary(all_results)
-
-str(all_results)
 
 ```
 
-#  Descriptive statistics
-
-Descriptive statistics were computed to summarize dominant tremor frequency and RMS amplitude across days and repetitions.
-
-Mean values, standard deviations, medians, and ranges were calculated in order to obtain a first overview of tremor variability and measurement stability.
 
 ```{r}
-library(tidyverse)
-
-descriptive_stats <- all_results %>%
+frequency_stats <- all_results %>%
   group_by(Day, Condition) %>%
   summarise(
     mean_frequency = mean(Dominant_Frequency_Hz),
@@ -59,11 +80,111 @@ descriptive_stats <- all_results %>%
     median_frequency = median(Dominant_Frequency_Hz),
     min_frequency = min(Dominant_Frequency_Hz),
     max_frequency = max(Dominant_Frequency_Hz),
-    mean_rms = mean(RMS_Amplitude),
-    sd_rms = sd(RMS_Amplitude),
     .groups = "drop"
   )
 
-descriptive_stats
+frequency_stats
 ```
+Dominant tremor frequency remained within the classical cerebellar tremor range (3–5 Hz) across repetitions and days.
+
+
+# Part 2 : Evolution over time 
+
+We want to see stability, reproducibility and trend.
+
+The most appropriate is a LINE plot.
+
+1. Plot for day 1 : Dominant frequency 
+```{r}
+# Select Day 1 data
+day1_data <- all_results %>%
+  filter(Day == "D1")
+
+ggplot(day1_data,
+       aes(x = Repetition,
+           y = Dominant_Frequency_Hz,
+           color = Condition,
+           group = Condition)) +
+  
+  geom_line(linewidth = 1.2) +
+  geom_point(size = 4) +
+  
+  geom_text(
+    aes(label = round(Dominant_Frequency_Hz, 2)),
+    vjust = -1,
+    size = 4,
+    color = "black"
+  ) +
+  
+  scale_color_manual(values = c(
+    "Rest" = "lightblue",
+    "Task" = "salmon"
+  )) +
+  
+  scale_x_continuous(breaks = c(1, 2, 3, 4)) +
+  coord_cartesian(ylim = c(3, 5)) +
+  
+  labs(
+    title = "Day 1 - Dominant tremor frequency across repetitions",
+    x = "Repetition",
+    y = "Dominant frequency (Hz)",
+    color = "Condition"
+  ) +
+  
+  theme_minimal(base_size = 10)
+```
+
+2.Plot 2 dor day 1 : RMS with rest + Task 
+```{r}
+day1_data <- all_results %>%
+
+  filter(Day == "D1")
+
+ggplot(day1_data,
+       aes(x = Repetition,
+           y = RMS_Amplitude,
+           color = Condition,
+           group = Condition)) +
+  
+  geom_line(linewidth = 1.2) +
+  geom_point(size = 4) +
+  geom_text(
+    aes(label = round(RMS_Amplitude, 2)),
+    vjust = -1,
+    size = 4,
+    color = "black"
+  ) +
+
+  scale_color_manual(values = c(
+    "Rest" = "lightblue",
+    "Task" = "salmon"
+  )) +
+
+  scale_x_continuous(
+    breaks = c(1, 2, 3, 4)
+  ) +
+  
+  # Zoomed RMS scale
+  coord_cartesian(
+    ylim = c(0, 1)
+  ) +
+  labs(
+    title = "Day 1 - RMS amplitude across repetitions",
+    x = "Repetition",
+    y = "RMS amplitude",
+    color = "Condition"
+  ) +
+  
+  theme_minimal(base_size = 10)
+```
+
+
+
+
+
+
+
+
+
+
 
