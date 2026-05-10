@@ -796,8 +796,15 @@ wilcox.test(
 )
 
 ```
-The Wilcoxon test was used as an exploratory non-parametric comparison between rest and task conditions.
-Given the exploratory single-patient design, these results should be interpreted cautiously.
+The Wilcoxon test showed a significant difference in RMS amplitude between rest and task conditions (p < 0.001), with substantially higher RMS values observed during voluntary movement.
+
+These findings are consistent with the classical clinical characteristics of cerebellar tremor, which typically increases during action and goal-directed movement.
+
+However, these results should be interpreted cautiously. The present work was designed as an exploratory feasibility and proof-of-concept study based on a single patient and a limited number of repetitions.
+
+Therefore, the objective was not to demonstrate a definitive physiological effect, but rather to evaluate whether smartphone accelerometry combined with FFT analysis could detect coherent and clinically meaningful tremor characteristics.
+
+Further studies including larger patient cohorts and standardized acquisition protocols would be necessary to confirm the reproducibility and clinical relevance of these preliminary observations.
 
 
 3.4 RMS amplitude according to recording day
