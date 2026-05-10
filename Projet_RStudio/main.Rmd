@@ -61,12 +61,17 @@ To verify if frequencies are in cerebellar area ans and if they are close betwee
 
 ```{r}
 
-# Import dataframe from the final data folder
+# Load packages
+
 library(tidyverse)
+
+# Import dataframe
 
 all_results <- read.csv("final_data/all_results.csv")
 
-View(all_results)
+# Display first rows
+
+head(all_results)
 
 ```
 
@@ -178,10 +183,41 @@ ggplot(day1_data,
   theme_minimal(base_size = 10)
 ```
 
+# Coefficient of variation (CV)
 
+The coefficient of variation (CV) was calculated to evaluate the variability of tremor measurements across repetitions.
 
+A low CV indicates good reproducibility and stability between repetitions, whereas a high CV reflects greater variability.
 
+The CV was calculated for both:
 
+* dominant tremor frequency,
+* and RMS amplitude.
+
+```{r}
+day1_cv <- day1_data %>%
+  group_by(Condition) %>%
+  summarise(
+    
+    mean_frequency = mean(Dominant_Frequency_Hz),
+    sd_frequency = sd(Dominant_Frequency_Hz),
+    CV_frequency = (sd_frequency / mean_frequency) * 100,
+    
+    mean_RMS = mean(RMS_Amplitude),
+    sd_RMS = sd(RMS_Amplitude),
+    CV_RMS = (sd_RMS / mean_RMS) * 100,
+    
+    .groups = "drop"
+  )
+
+day1_cv
+```
+
+A relatively low CV for dominant frequency suggests that tremor frequency remained stable across repetitions during Day 1.
+
+In contrast, RMS amplitude showed greater variability between rest and task conditions, reflecting modulation of tremor intensity during voluntary movement.
+
+These findings support the hypothesis that dominant tremor frequency is more stable than tremor amplitude across repeated measurements.
 
 
 
