@@ -321,126 +321,143 @@ Task frequencies remained within the expected cerebellar tremor frequency range,
 
 
 
+1.2.3 RMS amplitude evolution across repetitions
 
+Objective: To evaluate tremor intensity modulation during Day 2.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# Part 1 : Dominant Frequency 
-
-1. Descriptive Statistics
-
-Objective: To describe the obtained frequencies.
-
-We calculate : 
-* mean frequency
-* SD
-* min/max
-* median
-
-Why ? 
-To verify if frequencies are in cerebellar area ans and if they are close between repetitions.
-
-
-# Import data from the final data folder
-
+RMS amplitude reflects tremor intensity rather than tremor frequency.
 ```{r}
+ggplot(day2_data,
 
-# Load packages
+       aes(x = Repetition,
 
-library(tidyverse)
+           y = RMS_Amplitude,
 
-# Import dataframe
+           color = Condition,
 
-all_results <- read.csv("final_data/all_results.csv")
+           group = Condition)) +
 
-# Display first rows
+  geom_line(linewidth = 1.2) +
 
-head(all_results)
+  geom_point(size = 4) +
 
+  geom_text(
+
+    aes(label = round(RMS_Amplitude, 2)),
+
+    vjust = -1,
+
+    size = 4,
+
+    color = "black"
+
+  ) +
+
+  scale_color_manual(values = c(
+
+    "Rest" = "lightblue",
+
+    "Task" = "salmon"
+
+  )) +
+
+  scale_x_continuous(breaks = c(1,2,3,4)) +
+
+  coord_cartesian(ylim = c(0,1.2)) +
+
+  labs(
+
+    title = "Day 2 - RMS amplitude across repetitions",
+
+    x = "Repetition",
+
+    y = "RMS amplitude",
+
+    color = "Condition"
+
+  ) +
+
+  theme_minimal(base_size = 10)
+```
+RMS amplitudes remained substantially higher during task conditions than during rest periods, indicating increased tremor intensity during voluntary movement.
+This observation is consistent with the action-related characteristics of cerebellar tremor.
+
+
+1.2.4 Coefficient of variation (CV)
+
+Objective: To evaluate measurement variability across repetitions.
+
+The coefficient of variation (CV) was calculated for:
+
+* dominant tremor frequency,
+* RMS amplitude.
+
+A low CV indicates good reproducibility and low variability between repetitions.
+```{r}
+day2_cv <- day2_data %>%
+
+  group_by(Condition) %>%
+
+  summarise(
+
+    mean_frequency = mean(Dominant_Frequency_Hz),
+
+    sd_frequency = sd(Dominant_Frequency_Hz),
+
+    CV_frequency = (sd_frequency / mean_frequency) * 100,
+
+    mean_RMS = mean(RMS_Amplitude),
+
+    sd_RMS = sd(RMS_Amplitude),
+
+    CV_RMS = (sd_RMS / mean_RMS) * 100,
+
+    .groups = "drop"
+
+  )
+
+day2_cv
 ```
 
-2. Statistics 
+The coefficient of variation remained relatively low for dominant frequency during task conditions, suggesting good reproducibility across repeated measurements.
+
+Higher RMS variability was observed during rest periods compared with task conditions.
+
+
+1.2.5 Day 2 synthesis
+
+Overall, Day 2 analysis supports the reproducibility of smartphone-based accelerometry measurements for cerebellar tremor frequency quantification.
+
+Dominant tremor frequency remained within the expected cerebellar tremor range and showed relatively stable values across repetitions.
+
+RMS amplitude remained substantially higher during voluntary movement, supporting the clinical coherence of the measurements obtained using smartphone accelerometry and FFT analysis.
+
+
+
+# 1.3 Day 3 analysis
+
+## 1.3.1 Descriptive statistics
+
+Objective: To describe dominant tremor frequencies obtained during Day 3.
+
+We calculated:
+- mean frequency,
+- standard deviation (SD),
+- median,
+- minimum frequency,
+- maximum frequency.
+
+These descriptive statistics help verify whether the obtained frequencies remain within the classical cerebellar tremor range reported in the literature (3–5 Hz).
+
 ```{r}
-frequency_stats <- all_results %>%
-  group_by(Day, Condition) %>%
+# Select Day 3 data
+
+day3_data <- all_results %>%
+  filter(Day == "D3")
+
+# Descriptive statistics for Day 3
+day3_stats <- day3_data %>%
+  group_by(Condition) %>%
   summarise(
     mean_frequency = mean(Dominant_Frequency_Hz),
     sd_frequency = sd(Dominant_Frequency_Hz),
@@ -450,73 +467,65 @@ frequency_stats <- all_results %>%
     .groups = "drop"
   )
 
-frequency_stats
+day3_stats
 ```
-Dominant tremor frequency remained within the classical cerebellar tremor range (3–5 Hz) across repetitions and days.
-Frequencies remain between 3 and 5 Hz.
-So the app mesures something coherent with litterature. 
 
+Dominant tremor frequency during Day 3 remained within the classical cerebellar tremor range (3–5 Hz) for both rest and task conditions.
 
+1.3.2 Dominant frequency evolution across repetitions
 
-# Part 2 : Evolution over time, stability of frequencies
+Objective: To evaluate frequency stability across repetitions during Day 3.
 
-We want to see stability, reproducibility and trend.
-
-The most appropriate is a LINE plot.
-
-1. Plot for day 1 : Dominant frequency 
-Do the mesure change between tasks and repetitions ? 
+A line plot was used to visualize frequency evolution over repeated measurements.
 
 ```{r}
-# Select Day 1 data
-day1_data <- all_results %>%
-  filter(Day == "D1")
-
-ggplot(day1_data,
+ggplot(day3_data,
        aes(x = Repetition,
            y = Dominant_Frequency_Hz,
            color = Condition,
            group = Condition)) +
-  
   geom_line(linewidth = 1.2) +
   geom_point(size = 4) +
-  
   geom_text(
     aes(label = round(Dominant_Frequency_Hz, 2)),
     vjust = -1,
     size = 4,
     color = "black"
   ) +
-  
   scale_color_manual(values = c(
     "Rest" = "lightblue",
     "Task" = "salmon"
   )) +
-  
-  scale_x_continuous(breaks = c(1, 2, 3, 4)) +
-  coord_cartesian(ylim = c(3, 5)) +
-  
+  scale_x_continuous(breaks = c(1,2,3,4)) +
+  coord_cartesian(ylim = c(3,5)) +
   labs(
-    title = "Day 1 - Dominant tremor frequency across repetitions",
+    title = "Day 3 - Dominant tremor frequency across repetitions",
     x = "Repetition",
     y = "Dominant frequency (Hz)",
     color = "Condition"
   ) +
-  
   theme_minimal(base_size = 10)
 ```
-2.Plot 2 dor day 1 : RMS with rest + Task 
+
+
+Dominant tremor frequency during Day 3 remained relatively stable across repetitions and conditions.
+
+Task frequencies remained within the expected cerebellar tremor frequency range, supporting short-term reproducibility of smartphone-based frequency measurements.
+
+
+
+1.3.3 RMS amplitude evolution across repetitions
+
+Objective: To evaluate tremor intensity modulation during Day 3.
+
+RMS amplitude reflects tremor intensity rather than tremor frequency.
+
 ```{r}
-day1_data <- all_results %>%
-
-  filter(Day == "D1")
-
-ggplot(day1_data,
+ggplot(day3_data,
        aes(x = Repetition,
            y = RMS_Amplitude,
            color = Condition,
            group = Condition)) +
-  
   geom_line(linewidth = 1.2) +
   geom_point(size = 4) +
   geom_text(
@@ -525,81 +534,143 @@ ggplot(day1_data,
     size = 4,
     color = "black"
   ) +
-
   scale_color_manual(values = c(
     "Rest" = "lightblue",
     "Task" = "salmon"
   )) +
-
-  scale_x_continuous(
-    breaks = c(1, 2, 3, 4)
-  ) +
-  
-  # Zoomed RMS scale
-  coord_cartesian(
-    ylim = c(0, 1)
-  ) +
+  scale_x_continuous(breaks = c(1,2,3,4)) +
+  coord_cartesian(ylim = c(0,1.2)) +
   labs(
-    title = "Day 1 - RMS amplitude across repetitions",
+    title = "Day 3 - RMS amplitude across repetitions",
     x = "Repetition",
     y = "RMS amplitude",
     color = "Condition"
   ) +
-  
   theme_minimal(base_size = 10)
 ```
 
 
-3.Coefficient of variation (CV)
+RMS amplitudes remained substantially higher during task conditions than during rest periods, indicating increased tremor intensity during voluntary movement.
 
-The coefficient of variation (CV) was calculated to evaluate the variability of tremor measurements across repetitions.
+This observation is consistent with the action-related characteristics of cerebellar tremor.
 
-A low CV indicates good reproducibility and stability between repetitions, whereas a high CV reflects greater variability.
 
-The CV was calculated for both:
+
+1.3.4 Coefficient of variation (CV)
+
+Objective: To evaluate measurement variability across repetitions.
+
+The coefficient of variation (CV) was calculated for:
 
 * dominant tremor frequency,
-* and RMS amplitude.
+* RMS amplitude.
 
+A low CV indicates good reproducibility and low variability between repetitions.
 ```{r}
-day1_cv <- day1_data %>%
+
+day3_cv <- day3_data %>%
   group_by(Condition) %>%
   summarise(
-    
     mean_frequency = mean(Dominant_Frequency_Hz),
     sd_frequency = sd(Dominant_Frequency_Hz),
     CV_frequency = (sd_frequency / mean_frequency) * 100,
-    
     mean_RMS = mean(RMS_Amplitude),
     sd_RMS = sd(RMS_Amplitude),
     CV_RMS = (sd_RMS / mean_RMS) * 100,
-    
     .groups = "drop"
   )
-
-day1_cv
+day3_cv
 ```
+The coefficient of variation remained relatively low for dominant frequency during task conditions, suggesting acceptable reproducibility across repeated measurements.
+
+Higher RMS variability was observed during rest periods compared with task conditions.
 
 
-### Day 1 interpretation
 
-The objective of Day 1 analysis was to evaluate short-term reproducibility of tremor frequency measurements obtained using smartphone accelerometry and FFT analysis.
+1.3.5 Day 3 synthesis
 
-To answer this question, dominant tremor frequency and RMS amplitude were analyzed across repeated measurements during both rest and task conditions.
+Overall, Day 3 analysis supports the reproducibility of smartphone-based accelerometry measurements for cerebellar tremor frequency quantification.
 
-Descriptive statistics showed that dominant tremor frequency remained within the classical cerebellar tremor range reported in the literature (3–5 Hz).
+Dominant tremor frequency remained within the expected cerebellar tremor range and showed relatively stable values across repetitions.
 
-During rest conditions, mean dominant frequency was 4.27 Hz (SD = 0.87), whereas during task conditions it was 3.68 Hz (SD = 0.06).
+RMS amplitude remained substantially higher during voluntary movement, supporting the clinical coherence of the measurements obtained using smartphone accelerometry and FFT analysis.
 
-The evolution plots showed that dominant frequency remained relatively stable across repetitions during task performance (3.72 Hz then 3.63 Hz), suggesting good short-term reproducibility of frequency measurements.
 
-In contrast, rest measurements showed greater variability, with frequencies increasing from 3.27 Hz to 4.69 Hz and 4.85 Hz across repetitions. This variability may reflect residual postural oscillations, movement artefacts, or transient corrective movements occurring during rest periods.
 
-RMS amplitude analysis demonstrated a markedly different behavior. RMS values were substantially higher during task conditions (0.69–0.72) compared with rest periods (0.07–0.26), indicating that tremor intensity increased during voluntary movement.
 
-The coefficient of variation confirmed these observations. During task conditions, dominant frequency showed a low CV (1.73%), supporting good reproducibility across repetitions. Conversely, RMS amplitude during rest showed a much higher variability (CV = 82.27%), suggesting unstable tremor intensity at rest.
 
-Overall, Day 1 results suggest that smartphone accelerometry combined with FFT analysis can provide coherent and reproducible dominant frequency measurements consistent with cerebellar tremor characteristics.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
