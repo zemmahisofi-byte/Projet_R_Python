@@ -957,3 +957,19 @@ These findings support the clinical characteristics of cerebellar tremor, which 
 The consistency of RMS elevation across recording days suggests that smartphone accelerometry may provide clinically relevant information not only about tremor frequency, but also about tremor intensity during movement.
 
 
+**# Global synthesis of the results**
+
+Overall, the analyses performed in this study suggest that smartphone accelerometry combined with FFT analysis can provide coherent measurements of cerebellar tremor characteristics in a proof-of-concept framework.
+
+Across the three recording days, dominant tremor frequencies consistently remained within the classical cerebellar tremor range described in the literature (approximately 3–5 Hz). Frequency values showed relatively limited variability between repetitions and between recording days, supporting acceptable intra-day and inter-day reproducibility of the measurements.
+
+During task conditions, dominant tremor frequency generally remained stable across repetitions, whereas greater variability was observed during some rest periods. These fluctuations may reflect residual oscillatory activity, postural adjustments, involuntary corrective movements, or movement artefacts occurring during resting phases.
+
+RMS amplitude analysis showed a markedly different behavior. RMS values were consistently and substantially higher during voluntary movement compared with rest conditions across all recording days. This observation is clinically coherent with cerebellar tremor physiology, as cerebellar tremor classically increases during action and goal-directed movement.
+
+The exploratory Wilcoxon analysis also suggested a difference in RMS amplitude between rest and task conditions. However, these statistical findings should be interpreted cautiously due to the exploratory proof-of-concept design, the single-patient dataset, and the limited number of repetitions.
+
+Taken together, these results support the feasibility of using smartphone accelerometry to characterize cerebellar tremor frequency and tremor intensity in a simple and accessible manner.
+
+Although the present work does not aim to establish definitive clinical conclusions, it provides preliminary evidence supporting the potential utility of smartphone-based tremor analysis tools in future larger-scale studies.
+
