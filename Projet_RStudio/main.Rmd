@@ -41,7 +41,7 @@ We can answer this principal question in three under-parts :
 3) Does tremor increase during action?
 
 
-# Part 1 : Intra-day reproducibility
+**# Part 1 : Intra-day reproducibility**
 
 ## Do dominant tremor frequencies remain stable between repetitions?
 
@@ -586,7 +586,6 @@ The coefficient of variation remained relatively low for dominant frequency duri
 Higher RMS variability was observed during rest periods compared with task conditions.
 
 
-
 1.3.5 Day 3 synthesis
 
 Overall, Day 3 analysis supports the reproducibility of smartphone-based accelerometry measurements for cerebellar tremor frequency quantification.
@@ -597,11 +596,270 @@ RMS amplitude remained substantially higher during voluntary movement, supportin
 
 
 
+**# Part 2 : Inter-day reproducibility**
+
+## Do dominant tremor frequencies remain consistent between recording days?
+
+The objective of this second part is to evaluate inter-day reproducibility of dominant tremor frequency measurements obtained using smartphone accelerometry and FFT analysis.
+To answer this question, dominant tremor frequency values obtained during Day 1, Day 2 and Day 3 were compared.
+Stable frequency values across recording days would support the reproducibility of smartphone-based tremor quantification.
+
+
+# 2.1 Mean dominant frequency across recording days
+Objective: To compare mean dominant tremor frequency between Day 1, Day 2 and Day 3.
+
+Mean frequency values were calculated separately for:
+- rest conditions,
+- task conditions.
+```{r}
+daily_frequency <- all_results %>%
+  group_by(Day, Condition) %>%
+  summarise(
+    mean_frequency = mean(Dominant_Frequency_Hz),
+    sd_frequency = sd(Dominant_Frequency_Hz),
+    .groups = "drop"
+  )
+daily_frequency
+```
+The obtained frequencies remained within the classical cerebellar tremor range (3–5 Hz) across all recording days.
+
+
+2.2 Evolution of mean dominant frequency across days
+
+Objective: To visualize frequency stability between recording days.
+
+```{r}
+ggplot(daily_frequency,
+       aes(x = Day,
+           y = mean_frequency,
+           color = Condition,
+           group = Condition)) +
+  geom_line(linewidth = 1.2) +
+  geom_point(size = 4) +
+  geom_errorbar(
+    aes(
+      ymin = mean_frequency - sd_frequency,
+      ymax = mean_frequency + sd_frequency
+    ),
+    width = 0.1
+  ) +
+  geom_text(
+    aes(label = round(mean_frequency, 2)),
+    vjust = -1,
+    size = 4,
+    color = "black"
+  ) +
+  scale_color_manual(values = c(
+    "Rest" = "lightblue",
+    "Task" = "salmon"
+  )) +
+  coord_cartesian(ylim = c(3,5)) +
+  labs(
+    title = "Mean dominant tremor frequency across days",
+    x = "Recording day",
+    y = "Mean dominant frequency (Hz)",
+    color = "Condition"
+  ) +
+  theme_minimal(base_size = 10)
+
+```
+Mean dominant tremor frequency remained relatively stable across recording days for both rest and task conditions.
+
+Only limited frequency variations were observed between days, supporting acceptable inter-day reproducibility.
+
+
+2.3 Inter-day coefficient of variation
+
+Objective: To evaluate variability of dominant frequency measurements between recording days.
+
+The coefficient of variation (CV) was calculated across recording days.
+
+A low CV indicates better inter-day reproducibility.
+
+```{r}
+interday_cv <- daily_frequency %>%
+  group_by(Condition) %>%
+  summarise(
+    overall_mean_frequency = mean(mean_frequency),
+    overall_sd_frequency = sd(mean_frequency),
+    interday_CV =
+      (overall_sd_frequency / overall_mean_frequency) * 100,
+    .groups = "drop"
+  )
+interday_cv
+```
+
+
+Low inter-day CV values suggest relatively stable dominant frequency measurements across recording sessions.
+
+2.4 Exploratory statistical comparison between days
+
+Objective: To explore whether dominant tremor frequency differed significantly between recording days.
+
+Because this study included only one patient and a limited number of repetitions, a non-parametric exploratory approach was preferred.
+```{r}
+
+kruskal.test(
+  Dominant_Frequency_Hz ~ Day,
+  data = all_results
+)
+
+```
+
+The Kruskal-Wallis test was used as an exploratory analysis to compare dominant tremor frequency between recording days.
+
+Given the exploratory single-patient design, these results should be interpreted cautiously.
+
+
+2.5 Inter-day reproducibility synthesis
+
+Overall, dominant tremor frequency remained within the expected cerebellar tremor range across Day 1, Day 2 and Day 3.
+
+Mean frequencies showed relatively small variations between recording days, and inter-day coefficient of variation values remained acceptable.
+
+These findings suggest that smartphone accelerometry combined with FFT analysis may provide reproducible dominant tremor frequency measurements across repeated recording sessions.
+
+However, these observations remain exploratory and should be confirmed in larger patient cohorts.
 
 
 
 
+**# Part 3 : Effect of action on tremor intensity**
 
+## Does tremor intensity increase during voluntary movement?
+
+The objective of this third part is to evaluate whether tremor intensity increases during voluntary movement compared with rest conditions.
+
+To answer this question, RMS amplitude values obtained during rest and task conditions were compared.
+Unlike dominant frequency, which reflects the rhythmic component of tremor, RMS amplitude reflects the intensity of the movement signal.
+An increase in RMS amplitude during task conditions would therefore support the action-related characteristics of cerebellar tremor.
+
+# 3.1 Mean RMS amplitude according to condition
+
+Objective: To compare mean RMS amplitude between rest and task conditions.
+```{r}
+rms_condition_stats <- all_results %>%
+  group_by(Condition) %>%
+  summarise(
+    mean_RMS = mean(RMS_Amplitude),
+    sd_RMS = sd(RMS_Amplitude),
+    median_RMS = median(RMS_Amplitude),
+    min_RMS = min(RMS_Amplitude),
+    max_RMS = max(RMS_Amplitude),
+    .groups = "drop"
+  )
+rms_condition_stats
+```
+
+Mean RMS amplitude was substantially higher during task conditions compared with rest periods.
+
+
+
+3.2 RMS amplitude evolution during rest and task conditions
+
+Objective: To visualize differences in tremor intensity between rest and task conditions.
+
+```{r}
+ggplot(all_results,
+       aes(x = Condition,
+           y = RMS_Amplitude,
+           fill = Condition)) +
+  geom_boxplot(alpha = 0.7) +
+  geom_jitter(width = 0.1,
+              size = 3,
+              alpha = 0.8) +
+  scale_fill_manual(values = c(
+    "Rest" = "lightblue",
+    "Task" = "salmon"
+  )) +
+  labs(
+    title = "RMS amplitude according to condition",
+    x = "Condition",
+    y = "RMS amplitude"
+  ) +
+  theme_minimal(base_size = 10)
+```
+
+RMS amplitude values were globally higher during task conditions, suggesting increased tremor intensity during voluntary movement.
+
+
+3.3 Exploratory statistical comparison between rest and task conditions
+
+Objective: To explore whether RMS amplitude differed between rest and task conditions.
+
+Because this study included a single patient and a limited number of repetitions, a non-parametric exploratory approach was preferred.
+
+```{r}
+wilcox.test(
+  RMS_Amplitude ~ Condition,
+  data = all_results
+)
+
+```
+The Wilcoxon test was used as an exploratory non-parametric comparison between rest and task conditions.
+Given the exploratory single-patient design, these results should be interpreted cautiously.
+
+
+3.4 RMS amplitude according to recording day
+
+Objective: To visualize whether the increase in tremor intensity during movement remained consistent across recording days.
+
+```{r}
+daily_rms <- all_results %>%
+  group_by(Day, Condition) %>%
+  summarise(
+    mean_RMS = mean(RMS_Amplitude),
+    sd_RMS = sd(RMS_Amplitude),
+    .groups = "drop"
+  )
+daily_rms
+ggplot(daily_rms,
+       aes(x = Day,
+           y = mean_RMS,
+           color = Condition,
+           group = Condition)) +
+  geom_line(linewidth = 1.2) +
+  geom_point(size = 4) +
+  geom_errorbar(
+    aes(
+      ymin = mean_RMS - sd_RMS,
+      ymax = mean_RMS + sd_RMS
+    ),
+    width = 0.1
+  ) +
+  geom_text(
+    aes(label = round(mean_RMS, 2)),
+    vjust = -1,
+    size = 4,
+    color = "black"
+  ) +
+  scale_color_manual(values = c(
+    "Rest" = "lightblue",
+    "Task" = "salmon"
+  )) +
+  coord_cartesian(ylim = c(0,1.2)) +
+  labs(
+    title = "Mean RMS amplitude across days",
+    x = "Recording day",
+    y = "Mean RMS amplitude",
+    color = "Condition"
+  ) +
+  theme_minimal(base_size = 10)
+```
+
+
+Across all recording days, RMS amplitude remained consistently higher during task conditions than during rest periods.
+
+This observation supports the action-related nature of cerebellar tremor.
+
+
+3.5 Part 3 synthesis
+
+Overall, RMS amplitude values were substantially higher during voluntary movement than during rest conditions.
+
+These findings support the clinical characteristics of cerebellar tremor, which typically increases during action and goal-directed movement.
+
+The consistency of RMS elevation across recording days suggests that smartphone accelerometry may provide clinically relevant information not only about tremor frequency, but also about tremor intensity during movement.
 
 
 
