@@ -183,35 +183,47 @@ Dominant tremor frequency during Day 1 remained within the classical cerebellar 
 Objective: To evaluate frequency stability across repetitions during Day 1.
 
 A line plot was used to visualize frequency evolution over repeated measurements.
-
 ```{r}
+library(ggplot2)
+library(dplyr)
+library(readr)
 ggplot(day1_data,
        aes(x = Repetition,
            y = Dominant_Frequency_Hz,
            color = Condition,
            group = Condition)) +
+
   geom_line(linewidth = 1.2) +
+
   geom_point(size = 4) +
+
   geom_text(
     aes(label = round(Dominant_Frequency_Hz, 2)),
     vjust = -1,
     size = 4,
     color = "black"
   ) +
+
   scale_color_manual(values = c(
     "Rest" = "lightblue",
     "Task" = "salmon"
   )) +
+
   scale_x_continuous(breaks = c(1,2,3,4)) +
+
   coord_cartesian(ylim = c(3,5)) +
+
   labs(
     title = "Day 1 - Dominant tremor frequency across repetitions",
     x = "Repetition",
     y = "Dominant frequency (Hz)",
     color = "Condition"
   ) +
+
   theme_minimal(base_size = 10)
 ```
+
+
 During task conditions, dominant tremor frequency remained relatively stable across repetitions (3.72 Hz and 3.63 Hz), suggesting acceptable short-term reproducibility.
 
 Greater variability was observed during rest conditions, with frequencies increasing from 3.27 Hz to 4.69 Hz and 4.85 Hz across repetitions.
