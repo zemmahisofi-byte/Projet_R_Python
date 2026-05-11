@@ -1,0 +1,8 @@
+Day,Phase,Condition,Repetition,Dominant_Frequency_Hz,RMS_Amplitude
+D3,Rest1,Rest,1,4.348,0.089
+D3,Task1,Task,1,4.012,0.974
+D3,Rest2,Rest,2,3.567,0.188
+D3,Task2,Task,2,3.467,0.704
+D3,Rest3,Rest,3,3.008,0.189
+D3,Task3,Task,3,4.682,0.946
+D3,Rest4,Rest,4,3.015,0.039
