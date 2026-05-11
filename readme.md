@@ -2,208 +2,420 @@
 ------------------------------------------------
 # Characterization of cerebellar tremor across standardized upper-limb tasks using smartphone accelerometry Phyhox 
 
-## 1. Scientific Context 
 
-### 1.1. Background 
+# 1. Scientific problem
 
-A Tremor is an involuntary rhythmic movement involving oscillations or twiching mouvements of one or more body parts (Deuschl et al., 1998).
-There are many conditions associated with tremor wich is a frequent symptom in many neurological deseases, particularry cerebellar lesions, but also in functional movement disorders (Deuschl et al., 1998). 
+## 1.1. Context
 
-Cerebellar Tremor is an action tremor, meaning that it increases as hand reaches the target. 
+Cerebellar tremor is a movement disorder characterized by low-frequency oscillatory movements that typically increase during voluntary action and goal-directed movement.
 
-Cerebellar tremors are classically characterized by : 
-1) low frequency (less than 5 Hz), 
-2) high amplitude, 
-3) increase as an action approaches a target (Holmes, 1904; Elble, 2003). 
+Clinical tremor evaluation mainly relies on neurological examination and visual observation. However, these approaches remain partly subjective and may vary according to the examiner and the clinical context.
 
-They are often associated with other cerebellar signs, including ataxia, dysmetria, and impaired rapidly alternating movements (Elble, 2003). 
+In recent years, inertial sensors and accelerometers have emerged as promising tools for objective movement quantification. Smartphone accelerometers are particularly interesting because they are:
+- inexpensive,
+- portable,
+- accessible,
+- and widely available in clinical and everyday settings.
 
-Clinical evaluation of tremor still largly relies on subjectival observations end neurological examination, wich introduce a high degree of subjectivity. The use of inertial sensors, particularly accelerometers embedded in smartphones, may be a good solution to makes it possible to envision an objective, accessible, and reproducible quantification of tremor (Patel et al., 2012; Lipsmeier et al., 2018).
+Fast Fourier Transform (FFT) analysis allows transformation of acceleration signals from the time domain into the frequency domain, making it possible to identify dominant tremor frequencies.
 
-The objective is to quantify tremor frequency during dynamic upper-limb tasks using a reproducible and objective smartphone-based accelerometry measure.
+What we are looking for:
 
-### 1.2. Aim 
+To determine whether smartphone accelerometry combined with FFT analysis can provide coherent and reproducible measurements of cerebellar tremor characteristics in a proof-of-concept framework.
 
-The aim of this study is to quantify tremor frequency during standardized dynamic upper-limb tasks using smartphone-based accelerometry, in order to evaluate the feasibility and reproducibility of this method in a clinical setting.
 
-### 1.3. Method
 
-A continuous accelerometric recording was performed using a smartphone fixed on the patient's forearm. Data were collectetd using the Phyphox accelerometer application.
-The recording was performed at 100Hz during all sessions in a three dimension (x,y, z). 
+## 1.2. Aim
 
-The protocol consisted of a sequence of standardized upper-limb tasks:
-- rest (hands on knees),
-- arms extended forward,
-- finger pinch,
-- arm elevation,
-- finger-to-nose task,
-- glass manipulation (grasping and moving),
-- drinking,
-- filling a glass,
-- writing (comparing right end left hand).
-- spiral drawing (left then right hand).
+The aim of this study is to evaluate the feasibility of smartphone accelerometry for cerebellar tremor characterization.
 
-Each task was performed for 10 seconds and repeated 3 times times. 
-Rest periods were included between tasks.
-Data was collected 3 consecutives days to evaluate reproducibility.
+More specifically, the objectives are:
+- to quantify dominant tremor frequency,
+- to evaluate intra-day reproducibility,
+- to evaluate inter-day reproducibility,
+- and to compare tremor intensity between rest and task conditions.
 
-To analyze tremor frequency, a Fast Fourier Transform (FFT) was applied to the acceleration signal.
-FFT is a method that converts a signal measured over time into a signal expressed in frequency (Oppenheim & Schafer, 2010). It's allows us to see which frequencies are preset in the movement. 
-The result is frequency spectrum, where each frequency has an associated amplitude. 
-The dominant tremor frequency corresponds to the frequency with the highest amplitude in the spectrum.
 
-### 1.4 Participant
+
+## 1.3. Method
+
+Acceleration signals were recorded using the smartphone application *PhyPhox*.
+
+The smartphone was attached to the patient’s upper limb during repeated motor tasks.
+
+Recordings were performed over three different days and included:
+- rest periods,
+- and voluntary movement conditions.
+
+Acceleration was acquired along:
+- X axis,
+- Y axis,
+- Z axis.
+
+Sampling frequency:
+- 100 Hz
+
+For each recording:
+- acceleration magnitude was computed,
+- signal segmentation was performed,
+- FFT analysis was applied,
+- dominant tremor frequency was extracted,
+- RMS amplitude was calculated.
+
+
+
+## 1.4. Participant
+
 We analyzed the data of one male patient aged 63 years presenting a cerebellar tremor predominantly affecting the left upper limb. 
 
 
-## 2. Outcome measure 
+## 1.5. Outcome measures
 
-Dominant tremor frequency (Hz)
+### Dominant tremor frequency
 
-Tremor frequency is defined as the number of oscillations per second (Hz) (Deuschl et al., 1998).
+The primary outcome measure was dominant tremor frequency (Hz).
 
-It can be estimated in the time domain using the following relation:
+Dominant frequency corresponds to the frequency with the highest amplitude within the FFT spectrum.
 
-$f = \frac{N}{T}$
+Cerebellar tremor is classically associated with low-frequency oscillations between approximately 3 and 5 Hz.
+
+
+
+### RMS amplitude
+
+A secondary outcome measure was RMS amplitude (Root Mean Square amplitude).
+
+RMS amplitude reflects tremor intensity rather than tremor frequency.
+
+It was used to compare:
+- rest conditions,
+- and voluntary movement conditions.
+
+
+
+# 2. Python project
+
+## 2.1. Aim
+
+The objective of the Python project was:
+- to preprocess accelerometer signals,
+- to segment rest and task periods,
+- to perform FFT analysis,
+- and to extract tremor variables for statistical analysis.
+
+
+
+## 2.2. Data organization
+
+### 2.2.1. Raw accelerometer data
+
+For each recording day:
+- J1.csv
+- J2.csv
+- J3.csv
+
+Each file contains:
+- timestamp,
+- X acceleration,
+- Y acceleration,
+- Z acceleration.
+
+Sampling frequency:
+- 100 Hz
+
+Acceleration unit:
+- g
+
+
+### 2.2.2. Processed data
+
+After preprocessing and FFT analysis, the final dataset was exported as:
+
+- all_results.csv
+
+The file contains:
+- Day,
+- Phase,
+- Condition,
+- Repetition,
+- Dominant_Frequency_Hz,
+- RMS_Amplitude.
+
+
+
+## 2.3. Notebook organization
+
+### preprocessing.ipynb
+
+#### Aim
+
+To preprocess raw accelerometer signals and prepare data for frequency analysis.
+
+#### Input
+
+- J1.csv
+- J2.csv
+- J3.csv
+
+#### Main steps
+
+- Import accelerometer signals,
+- Visualization of X, Y and Z signals,
+- Computation of acceleration magnitude,
+- Manual segmentation of rest and task periods,
+- Visualization of segmented signals.
+
+Acceleration magnitude was calculated using:
+
+$$
+Magnitude = \sqrt{x^2 + y^2 + z^2}
+$$
+
+#### Output
+
+- segmented acceleration signals,
+- acceleration magnitude signals,
+- cleaned segments for FFT analysis.
+
+
+
+### frequency_analysis.ipynb
+
+#### Aim
+
+To extract dominant tremor frequency and RMS amplitude from segmented accelerometer signals.
+
+#### Input
+
+- segmented acceleration signals obtained during preprocessing.
+
+#### Main steps
+
+For each segmented period:
+- mean signal removal,
+- FFT computation,
+- extraction of positive frequencies,
+- analysis of frequencies between 3 and 5 Hz,
+- dominant frequency identification,
+- RMS amplitude computation.
+
+#### Output
+
+- dominant tremor frequency values,
+- RMS amplitude values,
+- all_results.csv exported for statistical analysis.
+
+
+
+# 3. RStudio project
+
+## 3.1. Aim
+
+The objective of the RStudio project was to evaluate:
+- intra-day reproducibility,
+- inter-day reproducibility,
+- and tremor intensity modulation during action.
+
+
+
+## 3.2. Data organization
+
+### Input file
+
+- all_results.csv
+
+### Columns
+
+- Day : Recording day (D1, D2, D3)
+- Phase : Rest or task phase
+- Condition : Rest or Task
+- Repetition : Repetition number
+- Dominant_Frequency_Hz : Dominant tremor frequency extracted from FFT analysis
+- RMS_Amplitude : RMS amplitude value
+
+
+
+## 3.3. Script organization
+
+### 3.3.1. Descriptive statistics
+
+#### Aim
+
+To describe dominant tremor frequency distributions across:
+- repetitions,
+- recording days,
+- and experimental conditions.
+
+#### Input
+
+- all_results.csv
+
+#### Calculated variables
+
+- mean frequency,
+- standard deviation (SD),
+- median frequency,
+- minimum frequency,
+- maximum frequency.
+
+#### Output
+
+Summary tables describing tremor frequency distributions for:
+- Day 1,
+- Day 2,
+- Day 3,
+- and all recording days combined.
+
+
+
+### 3.3.2. Intra-day reproducibility analysis
+
+#### Aim
+
+To evaluate the stability of dominant tremor frequency across repetitions within the same recording day.
+
+#### Input
+
+- all_results.csv
+
+#### Main analyses
+
+- Line plots of dominant frequency across repetitions,
+- Visualization of rest and task conditions,
+- Coefficient of variation (CV) calculation.
+
+#### Calculation
+
+$$
+CV = \frac{SD}{Mean} \times 100
+$$
 
 where:
-- *f* is the tremor frequency (Hz),
+- SD is the standard deviation,
+- Mean is the average dominant frequency.
 
-- *N* is the number of oscillations,
+#### Output
 
-- *T* is the duration of the signal (seconds).
+- frequency evolution plots,
+- intra-day variability measurements,
+- CV tables.
 
-In addition, frequency-domain analysis was performed using Fast Fourier Transform (FFT), which allows identification of the dominant frequency component of the signal (Oppenheim & Schafer, 2010).
 
-The dominant tremor frequency corresponds to the frequency with the highest amplitude in the spectrum (Elble, 2003). 
 
-For each task segment, the dominant tremor frequency was computed from the accelerometer signal.
-Each task was repeated three times, and the dominant frequency was calculated for each repetition.
-This allowed assessment of:
-- differences in tremor frequency between conditions (rest vs drinking),
-- and reproducibility of the measurement across repetitions and across recording days.
+### 3.3.3. Inter-day reproducibility analysis
 
+#### Aim
 
-## 3. Statistical analysis
+To evaluate the consistency of dominant tremor frequency measurements across recording days.
 
-Statistical analyses were performed using RStudio (R version 2023.06.0+421).
+#### Input
 
-The final dataset was obtained after signal preprocessing and frequency extraction performed in Python. For each recording segment, the following variables were included in the analysis:
-- recording day,
-- condition (Rest or Task),
-- repetition number,
-- dominant tremor frequency (Hz),
-- RMS amplitude.
+- all_results.csv
 
-The primary variable of interest was dominant tremor frequency, extracted using Fast Fourier Transform (FFT) analysis from accelerometer recordings.
+#### Main analyses
 
-Descriptive statistics were first calculated for dominant tremor frequency, including:
-- mean,
-- standard deviation (SD),
-- median,
-- minimum value,
-- maximum value.
+- Comparison of dominant frequencies between D1, D2 and D3,
+- Mean frequency visualization across days,
+- Global variability analysis.
 
-These analyses were used to verify whether the obtained frequencies remained within the classical cerebellar tremor frequency range described in the literature (approximately 3–5 Hz).
+#### Output
 
-To evaluate intra-day reproducibility, dominant tremor frequency evolution across repetitions was visualized using line plots for each recording day. RMS amplitude evolution across repetitions was also analyzed in order to evaluate tremor intensity modulation during movement.
+- inter-day comparison plots,
+- inter-day summary statistics,
+- exploratory reproducibility assessment.
 
-The coefficient of variation (CV) was calculated for dominant frequency and RMS amplitude to evaluate variability across repeated measurements. Lower CV values were interpreted as better reproducibility.
 
-To evaluate inter-day reproducibility, mean dominant tremor frequencies obtained during Day 1, Day 2 and Day 3 were compared graphically and descriptively.
 
-RMS amplitude values obtained during rest and task conditions were also compared in order to evaluate whether tremor intensity increased during voluntary movement.
+### 3.3.4. RMS amplitude analysis
 
-Finally, an exploratory Wilcoxon rank-sum test was performed to compare RMS amplitudes between rest and task conditions.
+#### Aim
 
-Because this study was designed as an exploratory proof-of-concept feasibility study involving a single patient and a limited number of repetitions, all statistical analyses were considered exploratory rather than confirmatory.
+To compare tremor intensity between:
+- rest conditions,
+- and voluntary movement conditions.
 
-## 4. Results
+#### Input
 
-### 4.1 Intra-day reproducibility of dominant tremor frequency
+- all_results.csv
 
-Dominant tremor frequencies obtained during the three recording days remained within the classical cerebellar tremor frequency range described in the literature (approximately 3–5 Hz).
+#### Main analyses
 
-For Day 1, dominant frequency values remained relatively stable during task repetitions, with frequencies measured at approximately 3.72 Hz and 3.63 Hz during the two completed task repetitions. Greater variability was observed during some rest periods, with frequency values ranging from approximately 3.27 Hz to 4.85 Hz.
+- RMS amplitude visualization,
+- Mean RMS comparison,
+- Exploratory statistical comparison using Wilcoxon rank-sum test.
 
-During Day 2 and Day 3, dominant tremor frequencies also remained globally stable across repetitions and conditions, supporting acceptable short-term intra-day reproducibility of the measurements.
+#### Output
 
-Coefficient of variation (CV) analyses showed relatively low variability for dominant frequency during task conditions, particularly during Day 1 (CV = 1.73%), suggesting acceptable reproducibility across repeated measurements.
+- RMS amplitude plots,
+- RMS summary tables,
+- exploratory statistical comparison.
 
 
 
-### 4.2 Tremor intensity during rest and task conditions
+## 3.4. Interpretation framework
 
-RMS amplitude analyses demonstrated a markedly different behavior compared with dominant frequency measurements.
+Because this study included:
+- a single patient,
+- a limited number of repetitions,
+- and exploratory analyses,
 
-Across the three recording days, RMS amplitude values were consistently higher during task conditions than during rest periods.
+the objective was not to establish definitive clinical conclusions but rather to evaluate the feasibility and coherence of smartphone-based tremor analysis.
 
-For Day 1, RMS amplitude reached approximately 0.69 and 0.72 during task repetitions, whereas rest values remained substantially lower overall.
 
-This increase in RMS amplitude during voluntary movement was observed consistently across recording sessions and is clinically coherent with cerebellar tremor physiology, as cerebellar tremor classically increases during action and goal-directed movement.
 
+## 3.5. Global interpretation
 
+Overall, dominant tremor frequencies remained within the classical cerebellar tremor range (approximately 3–5 Hz) across repetitions and recording days.
 
-### 4.3 Inter-day reproducibility
+Frequency measurements showed relatively limited variability, suggesting acceptable intra-day and inter-day reproducibility.
 
-Mean dominant tremor frequencies remained relatively stable between Day 1, Day 2 and Day 3.
+RMS amplitude values were consistently higher during voluntary movement conditions compared with rest conditions, which is clinically coherent with cerebellar tremor physiology.
 
-Only limited frequency variations were observed between recording days, supporting acceptable inter-day reproducibility of smartphone accelerometer measurements.
+Together, these observations support the feasibility of smartphone accelerometry combined with FFT analysis for exploratory tremor characterization.
 
-Similarly, RMS amplitude patterns remained globally consistent across recording sessions, with systematically higher values during task conditions compared with rest periods.
+---
 
+# 4. Discussion
 
+This proof-of-concept study suggests that smartphone accelerometry may provide accessible and clinically coherent measurements of cerebellar tremor characteristics.
 
-### 4.4 Exploratory statistical analysis
+One of the main strengths of this approach is the use of widely available technology that may potentially simplify quantitative tremor assessment in clinical practice.
 
-An exploratory Wilcoxon rank-sum test suggested a difference in RMS amplitude between rest and task conditions (p < 0.001), with substantially higher RMS values observed during voluntary movement.
+However, several limitations must be acknowledged:
+- single-patient dataset,
+- limited number of repetitions,
+- manual signal segmentation,
+- absence of comparison with validated motion capture systems,
+- possible movement artefacts.
 
-However, these findings should be interpreted cautiously due to the exploratory proof-of-concept design, the single-patient dataset, and the limited number of repetitions.
+Future studies should therefore include:
+- larger populations,
+- additional tremor disorders,
+- standardized acquisition protocols,
+- comparison with validated accelerometers,
+- blinded analyses,
+- multicentric validation studies.
 
 
 
-### 4.5 Global synthesis of the results
+# 5. Conclusion
 
-Overall, the analyses performed in this study suggest that smartphone accelerometry combined with FFT analysis can provide coherent measurements of cerebellar tremor characteristics within a proof-of-concept framework.
+This exploratory work supports the feasibility of smartphone accelerometry combined with FFT analysis for cerebellar tremor characterization.
 
-Across the three recording days, dominant tremor frequencies consistently remained within the classical cerebellar tremor frequency range (approximately 3–5 Hz). Frequency values showed relatively limited variability both between repetitions and between recording days, supporting acceptable intra-day and inter-day reproducibility of the measurements.
+Dominant tremor frequency measurements remained coherent with classical cerebellar tremor physiology and demonstrated acceptable reproducibility across repetitions and recording days.
 
-In contrast, RMS amplitude values were consistently higher during voluntary movement compared with rest conditions across all recording days, supporting the action-related characteristics of cerebellar tremor.
+Although larger validation studies remain necessary, these preliminary findings suggest potential clinical interest for accessible smartphone-based tremor analysis tools.
 
-Taken together, these findings support the feasibility of using smartphone accelerometry to characterize both tremor frequency and tremor intensity in a simple and accessible manner.
 
 
-## 5. Discussion
+# 6. References
 
-The present exploratory study aimed to evaluate whether smartphone accelerometry combined with FFT analysis could provide coherent and reproducible measurements of cerebellar tremor characteristics.
+1. Deuschl G, Bain P, Brin M. Consensus statement of the Movement Disorder Society on Tremor. Movement Disorders. 1998.
 
-Overall, the obtained results were globally consistent with the clinical characteristics of cerebellar tremor described in the literature. Dominant tremor frequencies remained within the classical cerebellar tremor frequency range (approximately 3–5 Hz) across recording days and repetitions. In addition, RMS amplitude values increased during voluntary movement compared with rest conditions, which is clinically coherent with the action-related nature of cerebellar tremor.
+2. Elble RJ. Tremor: clinical features, pathophysiology, and treatment. Neurologic Clinics. 2009.
 
-One of the main strengths of this study is the use of a simple and accessible acquisition system based on smartphone accelerometry. Compared with specialized motion analysis systems or dedicated wearable sensors, smartphone-based accelerometry offers several practical advantages, including portability, accessibility, low cost, and ease of use in non-specialized environments.
+3. Oppenheim AV, Schafer RW. Discrete-Time Signal Processing. Pearson. 2010.
 
-The reproducibility observed across repetitions and recording days also suggests that smartphone accelerometry combined with FFT analysis may provide sufficiently stable measurements for exploratory tremor characterization.
+4. Patel S et al. A review of wearable sensors and systems with application in rehabilitation. Journal of NeuroEngineering and Rehabilitation. 2012.
 
-However, several limitations must be acknowledged.
-
-First, this work was based on a single patient, which prevents any definitive statistical or clinical conclusions. The present study should therefore be considered as a proof-of-concept and feasibility study rather than a confirmatory clinical investigation.
-
-Second, the number of repetitions remained limited, and some recordings may have included movement artefacts, postural adjustments, or residual oscillatory activity that may partially explain the variability observed during some rest periods.
-
-In addition, manual segmentation of task periods may introduce minor variability in the signal processing pipeline. Future studies could improve standardization by implementing automated segmentation methods and more standardized acquisition protocols.
-
-Another important limitation is the absence of comparison with validated clinical accelerometry systems or wearable inertial sensors commonly used in movement analysis research. Future studies could compare smartphone accelerometry measurements with reference devices such as research-grade inertial measurement units (IMUs) or commercially available wearable accelerometers in order to evaluate measurement agreement and external validity.
-
-Future work could also include:
-- larger patient cohorts,
-- comparison between different tremor disorders,
-- longitudinal monitoring,
-- task-specific tremor analysis,
-- and more advanced signal processing approaches.
-
-It would also be particularly interesting to evaluate whether smartphone accelerometry could differentiate cerebellar tremor from other tremor disorders such as essential tremor or Parkinsonian tremor based on frequency and amplitude characteristics.
-
-Finally, additional analyses could explore other signal-processing features beyond dominant frequency and RMS amplitude, including spectral power distribution, entropy measures, or time-frequency analyses.
-
-Despite these limitations, the present work provides preliminary evidence supporting the feasibility of smartphone-based tremor analysis in a simple and accessible framework.
-
-These findings encourage further investigation of smartphone accelerometry as a potential complementary tool for tremor characterization and monitoring in future larger-scale clinical studies.
+5. Lipsmeier F et al. Evaluation of smartphone-based testing to generate exploratory outcome measures in Parkinson’s disease. Movement Disorders. 2018.
