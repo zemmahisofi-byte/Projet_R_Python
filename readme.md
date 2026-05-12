@@ -101,6 +101,7 @@ It was used to compare:
 
 # 2. Python project
 
+This project was analyzed with 3.10.18. 
 ## 2.1. Aim
 
 The objective of the Python project was:
@@ -215,7 +216,7 @@ For each segmented period:
 
 # 3. RStudio project
 
-All analyses were performed in a proof-of-concept framework and should not be interpreted as clinical validation.
+All analyses were performed with 2023.06.0+421 version of RStudio, in a proof-of-concept framework and should not be interpreted as clinical validation.
 
 ## 3.1. Aim
 
