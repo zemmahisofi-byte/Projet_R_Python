@@ -2,6 +2,12 @@
 ------------------------------------------------
 # Characterization of cerebellar tremor across standardized upper-limb tasks using smartphone accelerometry Phyhox 
 
+## How to run the project
+
+1. Open `Projet_python/main.ipynb` and run all cells to preprocess the accelerometer data and export `all_results.csv`.
+2. Open `Projet_RStudio/main.Rmd` and knit the document to generate the statistical analysis.
+3. Generated figures are saved in `Projet_python/results/figures/` and statistical outputs are available in `Projet_RStudio/final_data/`.
+
 
 # 1. Scientific problem
 
@@ -208,6 +214,8 @@ For each segmented period:
 
 
 # 3. RStudio project
+
+All analyses were performed in a proof-of-concept framework and should not be interpreted as clinical validation.
 
 ## 3.1. Aim
 
