@@ -187,7 +187,8 @@ A line plot was used to visualize frequency evolution over repeated measurements
 library(ggplot2)
 library(dplyr)
 library(readr)
-ggplot(day1_data,
+
+plot_day1_frequency <- ggplot(day1_data,
        aes(x = Repetition,
            y = Dominant_Frequency_Hz,
            color = Condition,
@@ -221,6 +222,15 @@ ggplot(day1_data,
   ) +
 
   theme_minimal(base_size = 10)
+
+plot_day1_frequency
+
+ggsave(
+  filename = "final_figures/day1_frequency_plot.pdf",
+  plot = plot_day1_frequency,
+  width = 8,
+  height = 5
+)
 ```
 
 
@@ -239,32 +249,49 @@ Objective: To evaluate tremor intensity modulation during Day 1.
 RMS amplitude reflects tremor intensity rather than tremor frequency.
 
 ```{r}
-ggplot(day1_data,
+plot_day1_rms <- ggplot(day1_data,
        aes(x = Repetition,
            y = RMS_Amplitude,
            color = Condition,
            group = Condition)) +
+
   geom_line(linewidth = 1.2) +
+
   geom_point(size = 4) +
+
   geom_text(
     aes(label = round(RMS_Amplitude, 2)),
     vjust = -1,
     size = 4,
     color = "black"
   ) +
+
   scale_color_manual(values = c(
     "Rest" = "lightblue",
     "Task" = "salmon"
   )) +
+
   scale_x_continuous(breaks = c(1,2,3,4)) +
+
   coord_cartesian(ylim = c(0,1)) +
+
   labs(
     title = "Day 1 - RMS amplitude across repetitions",
     x = "Repetition",
     y = "RMS amplitude",
     color = "Condition"
   ) +
+
   theme_minimal(base_size = 10)
+
+plot_day1_rms
+
+ggsave(
+  filename = "final_figures/day1_rms_plot.pdf",
+  plot = plot_day1_rms,
+  width = 8,
+  height = 5
+)
 
 ```
 RMS amplitude values were substantially higher during task conditions compared with rest conditions.
@@ -363,7 +390,7 @@ Objective: To evaluate frequency stability across repetitions during Day 2.
 
 A line plot was used to visualize frequency evolution over repeated measurements.
 ```{r}
-ggplot(day2_data,
+plot_day2_frequency <- ggplot(day2_data,
 
        aes(x = Repetition,
 
@@ -414,6 +441,15 @@ ggplot(day2_data,
   ) +
 
   theme_minimal(base_size = 10)
+
+plot_day2_frequency
+
+ggsave(
+  filename = "final_figures/day2_frequency_plot.pdf",
+  plot = plot_day2_frequency,
+  width = 8,
+  height = 5
+)
 ```
 Dominant tremor frequency during Day 2 remained globally stable across repetitions and conditions.
 
@@ -427,7 +463,7 @@ Objective: To evaluate tremor intensity modulation during Day 2.
 
 RMS amplitude reflects tremor intensity rather than tremor frequency.
 ```{r}
-ggplot(day2_data,
+plot_day2_rms <- ggplot(day2_data,
 
        aes(x = Repetition,
 
@@ -478,6 +514,15 @@ ggplot(day2_data,
   ) +
 
   theme_minimal(base_size = 10)
+
+plot_day2_rms
+
+ggsave(
+  filename = "final_figures/day2_rms_plot.pdf",
+  plot = plot_day2_rms,
+  width = 8,
+  height = 5
+)
 ```
 RMS amplitudes remained substantially higher during task conditions than during rest periods, indicating increased tremor intensity during voluntary movement.
 This observation is consistent with the action-related characteristics of cerebellar tremor.
@@ -579,32 +624,66 @@ Objective: To evaluate frequency stability across repetitions during Day 3.
 A line plot was used to visualize frequency evolution over repeated measurements.
 
 ```{r}
-ggplot(day3_data,
+plot_day3_frequency <- ggplot(day3_data,
+
        aes(x = Repetition,
+
            y = Dominant_Frequency_Hz,
+
            color = Condition,
+
            group = Condition)) +
+
   geom_line(linewidth = 1.2) +
+
   geom_point(size = 4) +
+
   geom_text(
+
     aes(label = round(Dominant_Frequency_Hz, 2)),
+
     vjust = -1,
+
     size = 4,
+
     color = "black"
+
   ) +
+
   scale_color_manual(values = c(
+
     "Rest" = "lightblue",
+
     "Task" = "salmon"
+
   )) +
+
   scale_x_continuous(breaks = c(1,2,3,4)) +
+
   coord_cartesian(ylim = c(3,5)) +
+
   labs(
+
     title = "Day 3 - Dominant tremor frequency across repetitions",
+
     x = "Repetition",
+
     y = "Dominant frequency (Hz)",
+
     color = "Condition"
+
   ) +
+
   theme_minimal(base_size = 10)
+
+plot_day3_frequency
+
+ggsave(
+  filename = "final_figures/day3_frequency_plot.pdf",
+  plot = plot_day3_frequency,
+  width = 8,
+  height = 5
+)
 ```
 
 
@@ -621,32 +700,66 @@ Objective: To evaluate tremor intensity modulation during Day 3.
 RMS amplitude reflects tremor intensity rather than tremor frequency.
 
 ```{r}
-ggplot(day3_data,
+plot_day3_rms <- ggplot(day3_data,
+
        aes(x = Repetition,
+
            y = RMS_Amplitude,
+
            color = Condition,
+
            group = Condition)) +
+
   geom_line(linewidth = 1.2) +
+
   geom_point(size = 4) +
+
   geom_text(
+
     aes(label = round(RMS_Amplitude, 2)),
+
     vjust = -1,
+
     size = 4,
+
     color = "black"
+
   ) +
+
   scale_color_manual(values = c(
+
     "Rest" = "lightblue",
+
     "Task" = "salmon"
+
   )) +
+
   scale_x_continuous(breaks = c(1,2,3,4)) +
+
   coord_cartesian(ylim = c(0,1.2)) +
+
   labs(
+
     title = "Day 3 - RMS amplitude across repetitions",
+
     x = "Repetition",
+
     y = "RMS amplitude",
+
     color = "Condition"
+
   ) +
+
   theme_minimal(base_size = 10)
+
+plot_day3_rms
+
+ggsave(
+  filename = "final_figures/day3_rms_plot.pdf",
+  plot = plot_day3_rms,
+  width = 8,
+  height = 5
+)
 ```
 
 
@@ -729,13 +842,16 @@ The obtained frequencies remained within the classical cerebellar tremor range (
 Objective: To visualize frequency stability between recording days.
 
 ```{r}
-ggplot(daily_frequency,
+plot_mean_frequency <- ggplot(daily_frequency,
        aes(x = Day,
            y = mean_frequency,
            color = Condition,
            group = Condition)) +
+
   geom_line(linewidth = 1.2) +
+
   geom_point(size = 4) +
+
   geom_errorbar(
     aes(
       ymin = mean_frequency - sd_frequency,
@@ -743,24 +859,38 @@ ggplot(daily_frequency,
     ),
     width = 0.1
   ) +
+
   geom_text(
     aes(label = round(mean_frequency, 2)),
     vjust = -1,
     size = 4,
     color = "black"
   ) +
+
   scale_color_manual(values = c(
     "Rest" = "lightblue",
     "Task" = "salmon"
   )) +
+
   coord_cartesian(ylim = c(3,5)) +
+
   labs(
     title = "Mean dominant tremor frequency across days",
     x = "Recording day",
     y = "Mean dominant frequency (Hz)",
     color = "Condition"
   ) +
+
   theme_minimal(base_size = 10)
+
+plot_mean_frequency
+
+ggsave(
+  filename = "final_figures/mean_frequency_across_days.pdf",
+  plot = plot_mean_frequency,
+  width = 8,
+  height = 5
+)
 
 ```
 Mean dominant tremor frequency remained relatively stable across recording days for both rest and task conditions.
@@ -860,24 +990,38 @@ Mean RMS amplitude was substantially higher during task conditions compared with
 Objective: To visualize differences in tremor intensity between rest and task conditions.
 
 ```{r}
-ggplot(all_results,
+plot_rms_condition <- ggplot(all_results,
        aes(x = Condition,
            y = RMS_Amplitude,
            fill = Condition)) +
+
   geom_boxplot(alpha = 0.7) +
+
   geom_jitter(width = 0.1,
               size = 3,
               alpha = 0.8) +
+
   scale_fill_manual(values = c(
     "Rest" = "lightblue",
     "Task" = "salmon"
   )) +
+
   labs(
     title = "RMS amplitude according to condition",
     x = "Condition",
     y = "RMS amplitude"
   ) +
+
   theme_minimal(base_size = 10)
+
+plot_rms_condition
+
+ggsave(
+  filename = "final_figures/rms_amplitude_condition_boxplot.pdf",
+  plot = plot_rms_condition,
+  width = 8,
+  height = 5
+)
 ```
 
 RMS amplitude values were globally higher during task conditions, suggesting increased tremor intensity during voluntary movement.
@@ -919,14 +1063,19 @@ daily_rms <- all_results %>%
     sd_RMS = sd(RMS_Amplitude),
     .groups = "drop"
   )
+
 daily_rms
-ggplot(daily_rms,
+
+plot_daily_rms <- ggplot(daily_rms,
        aes(x = Day,
            y = mean_RMS,
            color = Condition,
            group = Condition)) +
+
   geom_line(linewidth = 1.2) +
+
   geom_point(size = 4) +
+
   geom_errorbar(
     aes(
       ymin = mean_RMS - sd_RMS,
@@ -934,24 +1083,38 @@ ggplot(daily_rms,
     ),
     width = 0.1
   ) +
+
   geom_text(
     aes(label = round(mean_RMS, 2)),
     vjust = -1,
     size = 4,
     color = "black"
   ) +
+
   scale_color_manual(values = c(
     "Rest" = "lightblue",
     "Task" = "salmon"
   )) +
+
   coord_cartesian(ylim = c(0,1.2)) +
+
   labs(
     title = "Mean RMS amplitude across days",
     x = "Recording day",
     y = "Mean RMS amplitude",
     color = "Condition"
   ) +
+
   theme_minimal(base_size = 10)
+
+plot_daily_rms
+
+ggsave(
+  filename = "final_figures/mean_rms_across_days.pdf",
+  plot = plot_daily_rms,
+  width = 8,
+  height = 5
+)
 ```
 
 
